@@ -1,5 +1,5 @@
 # This file is a template, and might need editing before it works on your project.
-docker-build-master:
+docker-taurus-latest:
   # Official docker image.
   image: docker:latest
   stage: build
@@ -7,22 +7,11 @@ docker-build-master:
     - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS} 
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
+    - docker push symbiote/taurus:latest
   only:
     - master
 
-docker-build:
-  # Official docker image.
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
