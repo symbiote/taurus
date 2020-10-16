@@ -1,3 +1,7 @@
 FROM blazemeter/taurus
 
-RUN apt-get -y install screen vim less
+RUN apt-get update \
+    && apt-get -y install \
+    screen \
+    vim \
+    less
